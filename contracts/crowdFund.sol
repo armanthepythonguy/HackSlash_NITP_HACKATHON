@@ -21,7 +21,7 @@ contract crowdFund{
 
     function setDonations(string memory _title, string memory _details, address _address, uint _amount) public {
         donation memory Donation;
-        Donation.fund_id = id+1;
+        Donation.fund_id = id;
         Donation.amount = _amount;
         Donation.amount_got = 0;
         Donation.aggregator = _address;
@@ -32,7 +32,7 @@ contract crowdFund{
     }
 
     function getDonations(uint _index) public view returns (string memory title, string memory details, uint amount,uint amount_got) {
-        donation storage Donation = donations[_index-1];
+        donation storage Donation = donations[_index];
         return (Donation.title, Donation.details ,Donation.amount, Donation.amount_got);
     }
 
