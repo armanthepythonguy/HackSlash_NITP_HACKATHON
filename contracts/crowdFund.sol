@@ -3,11 +3,6 @@ pragma solidity >=0.4.22 <0.9.0;
 
 contract crowdFund{
     uint id = 0;
-    struct Transaction{
-        uint fund_id;
-        address giver;
-        uint amount;
-    }
     struct donation{
         uint fund_id;
         uint amount;
@@ -15,9 +10,10 @@ contract crowdFund{
         address aggregator;
         string title;
         string details;
+        address[] givers;
+        uint[] amount_given;
     }
     donation[] public donations;
-    Transaction[] public  transactions;
 
     function setDonations(string memory _title, string memory _details, address _address, uint _amount) public {
         donation memory Donation;
@@ -33,7 +29,7 @@ contract crowdFund{
 
     function getDonations(uint _index) public view returns (string memory title, string memory details, uint amount,uint amount_got) {
         donation storage Donation = donations[_index];
-        return (Donation.title, Donation.details ,Donation.amount, Donation.amount_got);
+        return (Donation.title, Donation.details , Donation.amount, Donation.amount_got);
     }
 
     function sendBal(uint _index) payable public {
@@ -41,11 +37,8 @@ contract crowdFund{
         donation storage Donation = donations[_index];
         payable(Donation.aggregator).transfer(amount);
         Donation.amount_got+=amount;
-        Transaction memory transaction;
-        transaction.fund_id = Donation.fund_id;
-        transaction.giver = msg.sender;
-        transaction.amount = amount;
-        transactions.push(transaction);
+        Donation.givers.push(msg.sender);
+        Donation.amount_given.push(amount);
     }
 
 
