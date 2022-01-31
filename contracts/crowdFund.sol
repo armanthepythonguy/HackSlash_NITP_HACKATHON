@@ -28,10 +28,25 @@ contract crowdFund{
         Donation.title = _title;
         Donation.details = _details;
         donations.push(Donation);
+        id+=1;
     }
 
     function getDonations(uint _index) public view returns (string memory title, string memory details, uint amount,uint amount_got) {
         donation storage Donation = donations[_index-1];
         return (Donation.title, Donation.details ,Donation.amount, Donation.amount_got);
     }
+
+    function sendBal(uint _index) payable public {
+        uint amount = msg.value;
+        donation storage Donation = donations[_index];
+        payable(Donation.aggregator).transfer(amount);
+        Donation.amount_got+=amount;
+        Transaction memory transaction;
+        transaction.fund_id = Donation.fund_id;
+        transaction.giver = msg.sender;
+        transaction.amount = amount;
+        transactions.push(transaction);
+    }
+
+
 }
