@@ -41,5 +41,10 @@ contract crowdFund{
         Donation.amount_given.push(amount);
     }
 
+    function getTransactions(uint _index) public view returns(address[] memory givers, uint[] memory amount_given){
+        donation storage Donation = donations[_index];
+        return (Donation.givers, Donation.amount_given);
+    }
+
 
 }
