@@ -9,41 +9,44 @@ contract crowdFund{
         uint amount_got;
         address aggregator;
         string title;
+        string url;
         string details;
         address[] givers;
         uint[] amount_given;
+        uint256[] timestamp;
     }
     donation[] public donations;
 
-    function setDonations(string memory _title, string memory _details, address _address, uint _amount) public {
+    function setDonations(string memory _title, string memory _url, string memory _details, address _address, uint _amount) public {
         donation memory Donation;
         Donation.fund_id = id;
         Donation.amount = _amount;
         Donation.amount_got = 0;
         Donation.aggregator = _address;
         Donation.title = _title;
+        Donation.url = _url;
         Donation.details = _details;
         donations.push(Donation);
         id+=1;
     }
 
-    function getDonations(uint _index) public view returns (string memory title, string memory details, uint amount,uint amount_got) {
+    function getDonations(uint _index) public view returns (string memory title, string memory url, string memory details, uint amount,uint amount_got) {
         donation storage Donation = donations[_index];
-        return (Donation.title, Donation.details , Donation.amount, Donation.amount_got);
+        return (Donation.title, Donation.url, Donation.details , Donation.amount, Donation.amount_got);
     }
 
-    function sendBal(uint _index) payable public {
-        uint amount = msg.value;
+    function sendBal(uint _index) public payable {
         donation storage Donation = donations[_index];
-        payable(Donation.aggregator).transfer(amount);
-        Donation.amount_got+=amount;
+        payable(Donation.aggregator).transfer(msg.value);
+        Donation.amount_got+=msg.value;
         Donation.givers.push(msg.sender);
-        Donation.amount_given.push(amount);
+        Donation.amount_given.push(msg.value);
+        Donation.timestamp.push(block.timestamp);
     }
 
-    function getTransactions(uint _index) public view returns(address[] memory givers, uint[] memory amount_given){
+    function getTransactions(uint _index) public view returns(address[] memory givers, uint[] memory amount_given, uint256[] memory timestamp){
         donation storage Donation = donations[_index];
-        return (Donation.givers, Donation.amount_given);
+        return (Donation.givers, Donation.amount_given, Donation.timestamp);
     }
 
 
