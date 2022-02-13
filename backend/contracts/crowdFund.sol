@@ -49,5 +49,7 @@ contract crowdFund{
         return (Donation.givers, Donation.amount_given, Donation.timestamp);
     }
 
-
+    function getAllDonations() public view returns(donation[] memory){
+        return donations;
+    }
 }
