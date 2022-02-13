@@ -11,13 +11,14 @@ contract crowdFund{
         string title;
         string url;
         string details;
+        string category;
         address[] givers;
         uint[] amount_given;
         uint256[] timestamp;
     }
     donation[] public donations;
 
-    function setDonations(string memory _title, string memory _url, string memory _details, address _address, uint _amount) public {
+    function setDonations(string memory _title, string memory _url, string memory _details, address _address, uint _amount, string memory _category) public {
         donation memory Donation;
         Donation.fund_id = id;
         Donation.amount = _amount;
@@ -25,6 +26,7 @@ contract crowdFund{
         Donation.aggregator = _address;
         Donation.title = _title;
         Donation.url = _url;
+        Donation.category = _category;
         Donation.details = _details;
         donations.push(Donation);
         id+=1;
